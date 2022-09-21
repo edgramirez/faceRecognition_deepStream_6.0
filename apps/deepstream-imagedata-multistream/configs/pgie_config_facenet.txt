@@ -62,7 +62,7 @@
 gpu-id=0
 net-scale-factor=0.0039215697906911373
 
-labelfile-path=/home/aaeon/github/faceRecognition_deepstream_6.1/apps/deepstream-imagedata-multistream/configs/labels.txt
+labelfile-path=/home/edgar/github/faceRecognition_deepstream_6.1/apps/deepstream-imagedata-multistream/configs/labels.txt
 #labelfile-path=/MIT-LAB2/github/faceRecognition_deepstream_5.1_v1.4/apps/deepstream-imagedata-multistream/configs/labels.txt
 #labelfile-path=/opt/nvidia/deepstream/deepstream-5.0/sources/apps/redaction_with_deepstream/fd_lpd_model/labels.txt
 #labelfile-path=/home/aaeon/github/faceRecognition_v1.3/apps/deepstream-imagedata-multistream/configs/labels.txt
@@ -70,7 +70,7 @@ labelfile-path=/home/aaeon/github/faceRecognition_deepstream_6.1/apps/deepstream
 
 # Modelo solo clase con model.etlt
 tlt-model-key=nvidia_tlt
-tlt-encoded-model=/home/aaeon/github/faceRecognition_deepstream_6.1/apps/deepstream-imagedata-multistream/configs/model.etlt
+tlt-encoded-model=/home/edgar/github/faceRecognition_deepStream_6.0/apps/deepstream-imagedata-multistream/configs/model.etlt
 #tlt-encoded-model=/MIT-LAB2/github/faceRecognition_deepstream_5.1_v1.4/apps/deepstream-imagedata-multistream/configs/model.etlt
 #tlt-encoded-model=/home/aaeon/github/faceRecognition_deepstream_5.1_v1.4/apps/deepstream-imagedata-multistream/configs/model.etlt
 #tlt-encoded-model=/home/aaeon/github/faceRecognition_v1.3/apps/deepstream-imagedata-multistream/configs/model.etlt
