@@ -53,6 +53,7 @@ import lib.server as srv
 import lib.common as com
 import lib.validate as validate
 import lib.service_variables as sv
+import lib.json_methods as jm
 
 # 6-nov-2021
 # Validar este arreglo saved_count para que se utiliza...
@@ -238,19 +239,25 @@ def set_age_gender_config():
 def set_blacklist_url(camera_service_id):
     if camera_service_id not in sv.urls:
         com.log_debug("Setting up endpoint for service is: {}".format("Blacklist - "+camera_service_id))
-        sv.urls.update({camera_service_id: com.USER_SERVER_ENDPOINT + '/api/blacklist'})
+        for item in sv.scfg[camera_service_id[7:24]]['services']:
+            if camera_service_id in item:
+                sv.urls.update({camera_service_id: item[camera_service_id]['blackList']['endpoint']})
 
 
 def set_whitelist_url(camera_service_id):
     if camera_service_id not in sv.urls:
         com.log_debug("Setting up endpoint for service is: {}".format("Whitelist - "+camera_service_id))
-        sv.urls.update({camera_service_id: com.USER_SERVER_ENDPOINT + '/api/whitelist'})
+        for item in sv.scfg[camera_service_id[7:24]]['services']:
+            if camera_service_id in item:
+                sv.urls.update({camera_service_id: item[camera_service_id]['whiteList']['endpoint']})
 
 
 def set_age_and_gender_url(camera_service_id):
     if camera_service_id not in sv.urls:
         com.log_debug("Setting up endpoint for service is: {}".format("Age and Gender - "+camera_service_id))
-        sv.urls.update({camera_service_id: com.USER_SERVER_ENDPOINT + '/api/ageGender'})
+        for item in sv.scfg[camera_service_id[7:24]]['services']:
+            if camera_service_id in item:
+                sv.urls.update({camera_service_id: item[camera_service_id]['ageAndGender']['endpoint']})
 
 
 def get_service_url(camera_service_id):
@@ -498,9 +505,9 @@ def whitelist_process(camera_service_id, image_encoding, image_meta, obj_id):
                 "matchedId": None,
                 "matchedName": None 
                 }
-        # biblio.send_json(data, 'POST', get_whitelist_url())
-        # background_result = threading.Thread(target=biblio.send_json, args=(sv.header,data,'POST',get_whitelist_url(),))
-        # background_result.start()
+        jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
+        #background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_whitelist_url(),))
+        #background_result.start()
         print('Rostro con id: {}, streaming {}, no esta en la White list. Reportando incidente: {}'.
               format(obj_id, camera_service_id, data))
         return True
@@ -530,9 +537,9 @@ def blacklist_process(camera_service_id, image_encoding, image_meta, obj_id):
             "matchedId": None,
             "matchedName": None 
             }
-    # biblio.send_json(data, 'POST', get_whitelist_url())
-    # background_result = threading.Thread(target=biblio.send_json, args=(sv.header, data, 'POST', get_whitelist_url(),))
-    # background_result.start()
+    jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
+    #background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_whitelist_url(),))
+    #background_result.start()
     print('Rostro con id: {}, streaming {}, esta en la Black list. Reportando incidente: {}'.
           format(obj_id, camera_service_id, data))
     return True
