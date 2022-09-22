@@ -505,9 +505,9 @@ def whitelist_process(camera_service_id, image_encoding, image_meta, obj_id):
                 "matchedId": None,
                 "matchedName": None 
                 }
-        jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
-        #background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_whitelist_url(),))
-        #background_result.start()
+        #jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
+        background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_service_url(camera_service_id),))
+        background_result.start()
         print('Rostro con id: {}, streaming {}, no esta en la White list. Reportando incidente: {}'.
               format(obj_id, camera_service_id, data))
         return True
@@ -537,9 +537,9 @@ def blacklist_process(camera_service_id, image_encoding, image_meta, obj_id):
             "matchedId": None,
             "matchedName": None 
             }
-    jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
-    #background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_whitelist_url(),))
-    #background_result.start()
+    #jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
+    background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_service_url(camera_service_id),))
+    background_result.start()
     print('Rostro con id: {}, streaming {}, esta en la Black list. Reportando incidente: {}'.
           format(obj_id, camera_service_id, data))
     return True
