@@ -67,11 +67,11 @@ MAX_DISPLAY_LEN = 64
 PGIE_CLASS_ID_FACE = 0
 
 # 6-Nov-2021
-# Variables no para necesarias para este modelo
+# Variables not necessary for this model
 #
-#PGIE_CLASS_ID_PLATE = 1
-#PGIE_CLASS_ID_MAKE = 2
-#PGIE_CLASS_ID_MODEL = 3
+# PGIE_CLASS_ID_PLATE = 1
+# PGIE_CLASS_ID_MAKE = 2
+# PGIE_CLASS_ID_MODEL = 3
 
 MUXER_OUTPUT_WIDTH = 1920
 MUXER_OUTPUT_HEIGHT = 1080
@@ -82,13 +82,14 @@ GST_CAPS_FEATURES_NVMM = "memory:NVMM"
 
 # 6-nov-2021
 # Arreglo no utilizado en este modelo
-#pgie_classes_str= ["face", "Placa", "Marca","Modelo"]
+# pgie_classes_str= ["face", "Placa", "Marca","Modelo"]
 
 CURRENT_DIR = os.getcwd()
 
-
-DEEPSTREAM_FACE_RECOGNITION_MINIMUM_CONFIDENCE = .86 # 0 cualquir cosa es reconocida como rostro, 1 es la maxima confidencia de que ese objeto es un rostro
-FRAME_SIZE = 1024*20                                 # bytes, permite elegir solo frames de un tamaño adecuado
+# 0 cualquier cosa es reconocida como rostro, 1 es la maxima confidencia de que ese objeto es un rostro
+DEEPSTREAM_FACE_RECOGNITION_MINIMUM_CONFIDENCE = .86
+# bytes, permite elegir solo frames de un tamaño adecuado
+FRAME_SIZE = 1024*20
 
 fps_streams = {}
 frame_count = {}
@@ -109,7 +110,8 @@ global BLACKLIST_DB_DIRECTORY
 #################  Model and service functions  #################
 
 def set_action_common_variables(service_name):
-    global GET_SERVER_CONFIG_URI, BASE_DIRECTORY, BASE_INPUT_DB_DIRECTORY, DEMO, WHITELIST_DB_NAME, WHITELIST_DB_DIRECTORY, BLACKLIST_DB_NAME, BLACKLIST_DB_DIRECTORY
+    global GET_SERVER_CONFIG_URI, BASE_DIRECTORY, BASE_INPUT_DB_DIRECTORY, DEMO, WHITELIST_DB_NAME, \
+        WHITELIST_DB_DIRECTORY, BLACKLIST_DB_NAME, BLACKLIST_DB_DIRECTORY
 
     if service_name == "whiteList" or service_name == "blackList":
         GET_SERVER_CONFIG_URI = com.USER_SERVER_ENDPOINT+"/people/configPerServer"
@@ -181,7 +183,8 @@ def set_blacklist_db(camera_service_id):
                 set_known_faces_db_name(camera_service_id, search_db_name)
                 # Extrae de la db de blackList
                 # Estos valores son fijos y solo se leen una sola vez desde el archivo de base de datos o serializado
-                sv.blacklist_encodings, sv.blacklist_metas = com.read_pickle(get_known_faces_db_name(camera_service_id), False)
+                sv.blacklist_encodings, sv.blacklist_metas = com.read_pickle(get_known_faces_db_name(camera_service_id),
+                                                                             False)
                 # Carga los datos en sus dictionarios globales correspondientes
                 return True
 
@@ -208,7 +211,8 @@ def set_whitelist_db(camera_service_id):
                 # Guarda el nombre de la db de whiteList
                 set_known_faces_db_name(camera_service_id, search_db_name)
                 # Extrae de la db de blackList
-                sv.whitelist_encodings, sv.whitelist_metas = com.read_pickle(get_known_faces_db_name(camera_service_id), False)
+                sv.whitelist_encodings, sv.whitelist_metas = com.read_pickle(get_known_faces_db_name(camera_service_id),
+                                                                             False)
                 # Carga los datos en sus dictionarios globales correspondientes
                 return True
 
@@ -266,7 +270,7 @@ def get_service_url(camera_service_id):
     if camera_service_id in sv.urls:
         return sv.urls[camera_service_id]
 
-    com.log_error("Unable to get service endpoint for service id: {} / url list = {}".format(camera_service_id, sv.urls))
+    com.log_error("Unable to get service endpoint for id: {} / url list = {}".format(camera_service_id, sv.urls))
 
 
 def set_action_helper(srv_camera_id, service_name):
@@ -274,40 +278,40 @@ def set_action_helper(srv_camera_id, service_name):
         config_age_and_gender(srv_camera_id)
         return True
     else:
-        com.log_error("Servicio '"+service_name+"' no definido")
+        com.log_error("Service '"+service_name+"' not defined")
 
 
 def set_action(srv_camera_id, service_name):
-    '''
+    """
     Esta function transfiere la configuration de los parametros hacia los servicios activos por cada camara
-    '''
+    """
     execute_actions = False
     if service_name in com.SERVICES:
         sv.action.update({srv_camera_id: service_name})
         com.log_debug('Set "{}" variables for service id: {}'.format(service_name, srv_camera_id))
         if service_name == 'find':
             if service_name == com.SERVICE_DEFINITION[com.SERVICES[service_name]]:
-                com.log_error("Servicio de find no definido aun")
+                com.log_error("Service de find no definido aun")
             else:
-                com.log_error("Servicio '"+service_name+"' no definido")
+                com.log_error("Service '"+service_name+"' not defined")
         elif service_name == 'blackList':
             if service_name in com.SERVICE_DEFINITION[com.SERVICES[service_name]] and BLACKLIST_DB_NAME:
                 config_blacklist(srv_camera_id)
                 execute_actions = True
             else:
-                com.log_error("Servicio '"+service_name+"' no definido")
+                com.log_error("Service '"+service_name+"' not defined")
         elif service_name == 'whiteList':
             if service_name in com.SERVICE_DEFINITION[com.SERVICES[service_name]] and WHITELIST_DB_NAME:
                 config_whitelist(srv_camera_id)
                 execute_actions = True
             else:
-                com.log_error("Servicio '"+service_name+"' no definido")
+                com.log_error("Service '"+service_name+"' not defined")
         elif service_name == 'ageAndGender':
             if service_name in com.SERVICE_DEFINITION[com.SERVICES[service_name]]:
                 config_age_and_gender(srv_camera_id)
                 execute_actions = True
             else:
-                com.log_error("Servicio '"+service_name+"' no definido")
+                com.log_error("Service '"+service_name+"' not defined")
         elif service_name == 'aforo':
             execute_actions = set_action_helper(srv_camera_id, service_name)
 
@@ -318,7 +322,6 @@ def set_action(srv_camera_id, service_name):
 
 
 #####################  Non specific to Model or Service functions  #####################
-
 
 def set_config(scfg):
     number_sources = 0
@@ -474,7 +477,7 @@ def get_gender_and_age(image):
 
     sv.gender_age_dict["genderNet"].setInput(blob)
     gender_preds = sv.gender_age_dict["genderNet"].forward()
-    #print(gender_preds[0].argmax())
+    # print(gender_preds[0].argmax())
     gender = sv.genderList[gender_preds[0].argmax()]
     print(f'Gender: {gender}')
 
@@ -490,7 +493,8 @@ def whitelist_process(camera_service_id, image_encoding, image_meta, obj_id):
     if obj_id in not_applicable_id:
         return False
 
-    metadata, best_index, difference = biblio.lookup_known_face(image_encoding, sv.whitelist_encodings, sv.whitelist_metas)
+    metadata, best_index, difference = biblio.lookup_known_face(image_encoding, sv.whitelist_encodings,
+                                                                sv.whitelist_metas)
 
     # WhiteList reporta cuando no hay coincidencias
     if best_index is None:
@@ -505,8 +509,9 @@ def whitelist_process(camera_service_id, image_encoding, image_meta, obj_id):
                 "matchedId": None,
                 "matchedName": None 
                 }
-        #jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
-        background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_service_url(camera_service_id),))
+        # jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
+        background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST',
+                                                                        get_service_url(camera_service_id),))
         background_result.start()
         print('Rostro con id: {}, streaming {}, no esta en la White list. Reportando incidente: {}'.
               format(obj_id, camera_service_id, data))
@@ -537,8 +542,9 @@ def blacklist_process(camera_service_id, image_encoding, image_meta, obj_id):
             "matchedId": None,
             "matchedName": None 
             }
-    #jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
-    background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST', get_service_url(camera_service_id),))
+    # jm.send_json(sv.header, data, 'POST', get_service_url(camera_service_id))
+    background_result = threading.Thread(target=jm.send_json, args=(sv.header, data, 'POST',
+                                                                    get_service_url(camera_service_id),))
     background_result.start()
     print('Rostro con id: {}, streaming {}, esta en la Black list. Reportando incidente: {}'.
           format(obj_id, camera_service_id, data))
@@ -629,12 +635,13 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                     if obj_meta.object_id not in previous_treated_elements:
                         print("Trying to process image ................", obj_meta.object_id, obj_meta.confidence)
                         # tratar de generar un codificado de la imagen
-                        image_encoding, image_meta = biblio.encoding_image_from_source(camera_id, frame_image, obj_meta.confidence)
+                        image_encoding, image_meta = biblio.encoding_image_from_source(camera_id, frame_image,
+                                                                                       obj_meta.confidence)
                         
                         # si se logro codificar (es decir, no es vacio "[]"), entonces se registra como rostro
                         # analizado y solo se vuelve a analizar si la confianza es mayor
                         if image_meta:
-                            print("Image successfully processed ................", obj_meta.object_id, obj_meta.confidence)
+                            print("Image successfully processed .........", obj_meta.object_id, obj_meta.confidence)
                             add_to_treated_face_ids(camera_id, obj_meta.object_id)
 
                             for camera_service_id, service_name in sv.action.items():
@@ -737,7 +744,6 @@ def get_treated_face_ids(camera_id):
     return {}
 
 
-
 def main():
     global call_order_of_keys
 
@@ -748,7 +754,7 @@ def main():
     number_sources = set_config(sv.scfg)
     is_live = False
 
-    com.log_debug("Numero de fuentes :{}".format(number_sources))
+    com.log_debug("Number of sources :{}".format(number_sources))
     print("\n------ Fps_streams: ------ \n", fps_streams)
 
     # Standard GStreamer initialization
@@ -804,9 +810,9 @@ def main():
             i += 1
             break
 
-    '''
+    """
     -------- Configuration loaded --------
-    '''
+    """
 
     com.log_debug("Creating Pgie")
     pgie = Gst.ElementFactory.make("nvinfer", "primary-inference")
@@ -884,7 +890,7 @@ def main():
     #fin de la definicion
 
     pgie.set_property('config-file-path', CURRENT_DIR + "/configs/pgie_config_facenet.txt")
-    pgie_batch_size=pgie.get_property("batch-size")
+    pgie_batch_size = pgie.get_property("batch-size")
     if pgie_batch_size != number_sources:
         com.log_debug("WARNING: Overriding infer-config batch-size '{}', with number of sources {}".
                       format(pgie_batch_size, number_sources))
@@ -925,8 +931,8 @@ def main():
     tiler.set_property("width", TILED_OUTPUT_WIDTH)
     tiler.set_property("height", TILED_OUTPUT_HEIGHT)
 
-    sink.set_property("sync", 0)                    # Sync on the clock 
-    sink.set_property("qos", 0)                     # faltaba del archivo original deepstream_imagedata_multistream.py Generate Quality-of-Service events upstream
+    sink.set_property("sync", 0) # Sync on the clock
+    sink.set_property("qos", 0) # faltaba archivo original deepstream_imagedata_multistream.py Generate Quality-of-Service events upstream
 
     if not is_aarch64():
         # Use CUDA unified memory in the pipeline so frames
@@ -1017,6 +1023,7 @@ def main():
     try:
         loop.run()
     except Exception as e:
+        com.log_debug("------  ORIGINAL Exception in execution: {} ------".format(str(e)))
         pass
 
     # cleanup
